@@ -6,6 +6,7 @@ import { Medicine } from '../models/Medicine';
 import { MembershipPlan } from '../models/Membership';
 import { Test, HealthCheckupPackage } from '../models/HealthCheckup';
 import { Facility } from '../models/Facility';
+import { Doctor } from '../models/Doctor';
 import { hashPassword } from '../utils/password';
 
 export async function runSeed() {
@@ -849,6 +850,239 @@ export async function runSeed() {
     { upsert: true, new: true }
   );
 
+  // 8. Specialist Physicians & Doctors
+  console.log('[Seed] Seeding 10+ Specialist Physicians...');
+  const defaultDoctorPassword = await hashPassword('DoctorSecure2026!');
+  const doctorsData = [
+    {
+      name: 'Dr. Clara Zimmerman, MD',
+      email: 'clara.z@medicare.demo',
+      phone: '+1 (555) 200-0005',
+      specialization: 'Pediatrics',
+      qualifications: ['MD Pediatrics', 'FAAP'],
+      experienceYears: 12,
+      consultationFee: 95,
+      biography: 'Caring, compassionate child healthcare from infancy through adolescence, growth milestones, vaccinations, and nutrition.',
+      avatar: 'https://images.unsplash.com/photo-1594824813511-19d452093e9a?auto=format&fit=crop&q=80&w=400',
+      languages: ['English', 'German'],
+      consultationTypes: ['IN_PERSON', 'VIDEO'],
+      rating: 5.0,
+      reviewCount: 185,
+      isVerified: true,
+      isActive: true,
+      hospitalAffiliation: 'Medicare Children’s Wellness Center',
+      availableDays: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+      availableSlots: ['09:00', '10:00', '11:00', '14:00', '15:00', '16:00'],
+    },
+    {
+      name: 'Dr. Hiba Zahra, MD',
+      email: 'hiba.z@medicare.demo',
+      phone: '+1 (555) 200-0009',
+      specialization: 'Psychiatry',
+      qualifications: ['MD Psychiatry', 'Board Certified in Adult Psychiatry'],
+      experienceYears: 13,
+      consultationFee: 150,
+      biography: 'Empathetic, evidence-informed mental wellness, anxiety, depression therapy management, and cognitive behavioral consultations.',
+      avatar: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=400',
+      languages: ['English', 'Arabic'],
+      consultationTypes: ['VIDEO'],
+      rating: 5.0,
+      reviewCount: 160,
+      isVerified: true,
+      isActive: true,
+      hospitalAffiliation: 'Medicare Mental Health & Behavioral Sciences',
+      availableDays: ['Tuesday', 'Wednesday', 'Thursday', 'Saturday'],
+      availableSlots: ['10:00', '11:00', '13:00', '15:00', '17:00'],
+    },
+    {
+      name: 'Dr. Eliza Reed, MD',
+      email: 'eliza.reed@medicare.demo',
+      phone: '+1 (555) 200-0001',
+      specialization: 'Cardiology',
+      qualifications: ['MD Cardiology', 'FACC'],
+      experienceYears: 16,
+      consultationFee: 140,
+      biography: 'Preventative cardiovascular care, hypertension management, lipid disorders, and non-invasive diagnostic evaluations.',
+      avatar: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=400',
+      languages: ['English', 'Spanish'],
+      consultationTypes: ['IN_PERSON', 'VIDEO'],
+      rating: 4.9,
+      reviewCount: 220,
+      isVerified: true,
+      isActive: true,
+      hospitalAffiliation: 'Metropolitan Heart & Vascular Institute',
+      availableDays: ['Monday', 'Wednesday', 'Friday'],
+      availableSlots: ['08:30', '09:30', '10:30', '14:00', '16:00'],
+    },
+    {
+      name: 'Dr. Julian Hayes, MD',
+      email: 'julian.h@medicare.demo',
+      phone: '+1 (555) 200-0003',
+      specialization: 'Dermatology',
+      qualifications: ['MD Dermatology', 'FAAD'],
+      experienceYears: 14,
+      consultationFee: 125,
+      biography: 'Specializing in inflammatory skin disorders, eczema, acne therapies, mole surveillance, and clinical dermatosurgery.',
+      avatar: 'https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=400',
+      languages: ['English'],
+      consultationTypes: ['IN_PERSON', 'VIDEO'],
+      rating: 4.9,
+      reviewCount: 195,
+      isVerified: true,
+      isActive: true,
+      hospitalAffiliation: 'Advanced Dermatology & Laser Clinic',
+      availableDays: ['Monday', 'Tuesday', 'Thursday', 'Friday'],
+      availableSlots: ['09:00', '10:30', '12:00', '14:30', '16:00'],
+    },
+    {
+      name: 'Dr. Marcus Vance, MD',
+      email: 'marcus.v@medicare.demo',
+      phone: '+1 (555) 200-0004',
+      specialization: 'Neurology',
+      qualifications: ['MD Neurology', 'Fellow in Neurophysiology'],
+      experienceYears: 18,
+      consultationFee: 165,
+      biography: 'Expert clinical evaluation for migraines, neuromuscular disorders, neuropathy, stroke recovery, and epilepsy therapies.',
+      avatar: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&q=80&w=400',
+      languages: ['English', 'French'],
+      consultationTypes: ['IN_PERSON', 'VIDEO'],
+      rating: 4.9,
+      reviewCount: 142,
+      isVerified: true,
+      isActive: true,
+      hospitalAffiliation: 'Medicare Brain & Spine Institute',
+      availableDays: ['Monday', 'Tuesday', 'Wednesday'],
+      availableSlots: ['10:00', '11:30', '14:00', '15:30'],
+    },
+    {
+      name: 'Dr. Sarah Chen, MD',
+      email: 'sarah.c@medicare.demo',
+      phone: '+1 (555) 200-0002',
+      specialization: 'General Medicine',
+      qualifications: ['MD Internal Medicine', 'FACP'],
+      experienceYears: 11,
+      consultationFee: 85,
+      biography: 'Comprehensive adult health, annual physicals, chronic symptom triage, preventative metabolic screenings, and routine care.',
+      avatar: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=400',
+      languages: ['English', 'Mandarin'],
+      consultationTypes: ['IN_PERSON', 'VIDEO'],
+      rating: 4.8,
+      reviewCount: 280,
+      isVerified: true,
+      isActive: true,
+      hospitalAffiliation: 'Medicare Primary Health Hub',
+      availableDays: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+      availableSlots: ['08:00', '09:00', '10:00', '11:00', '13:00', '14:00', '15:00', '16:00'],
+    },
+    {
+      name: 'Dr. Anthony Rossi, MD',
+      email: 'anthony.r@medicare.demo',
+      phone: '+1 (555) 200-0006',
+      specialization: 'Orthopedics',
+      qualifications: ['MD Orthopedic Surgery', 'FAAOS'],
+      experienceYears: 15,
+      consultationFee: 155,
+      biography: 'Joint replacement specialist, sports injury rehabilitation, spinal biomechanics, arthritis management, and arthroscopy.',
+      avatar: 'https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=400',
+      languages: ['English', 'Italian'],
+      consultationTypes: ['IN_PERSON'],
+      rating: 4.8,
+      reviewCount: 173,
+      isVerified: true,
+      isActive: true,
+      hospitalAffiliation: 'Metro Orthopedics & Sports Medicine Center',
+      availableDays: ['Tuesday', 'Thursday', 'Friday'],
+      availableSlots: ['09:00', '10:30', '14:00', '16:00'],
+    },
+    {
+      name: 'Dr. Priya Sharma, MD',
+      email: 'priya.s@medicare.demo',
+      phone: '+1 (555) 200-0007',
+      specialization: 'Endocrinology',
+      qualifications: ['MD Endocrinology & Metabolism', 'FACE'],
+      experienceYears: 14,
+      consultationFee: 135,
+      biography: 'Advanced diabetes therapeutics, thyroid disorders, hormonal imbalances, osteoporosis, and adrenal metabolic disease.',
+      avatar: 'https://images.unsplash.com/photo-1594824813511-19d452093e9a?auto=format&fit=crop&q=80&w=400',
+      languages: ['English', 'Hindi'],
+      consultationTypes: ['IN_PERSON', 'VIDEO'],
+      rating: 4.9,
+      reviewCount: 215,
+      isVerified: true,
+      isActive: true,
+      hospitalAffiliation: 'Medicare Endocrinology Clinic',
+      availableDays: ['Monday', 'Wednesday', 'Thursday'],
+      availableSlots: ['09:30', '11:00', '14:30', '16:00'],
+    },
+    {
+      name: 'Dr. David Miller, MD',
+      email: 'david.m@medicare.demo',
+      phone: '+1 (555) 200-0008',
+      specialization: 'Gastroenterology',
+      qualifications: ['MD Gastroenterology & Hepatology', 'FACG'],
+      experienceYears: 17,
+      consultationFee: 145,
+      biography: 'Digestive tract health, acid reflux management, inflammatory bowel disease (IBD), liver diagnostics, and preventative endoscopy.',
+      avatar: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=400',
+      languages: ['English'],
+      consultationTypes: ['IN_PERSON', 'VIDEO'],
+      rating: 4.8,
+      reviewCount: 158,
+      isVerified: true,
+      isActive: true,
+      hospitalAffiliation: 'Medicare Digestive Health Pavilion',
+      availableDays: ['Monday', 'Tuesday', 'Friday'],
+      availableSlots: ['09:00', '10:30', '13:30', '15:00'],
+    },
+    {
+      name: 'Dr. Elena Rostova, MD',
+      email: 'elena.r@medicare.demo',
+      phone: '+1 (555) 200-0010',
+      specialization: 'Ophthalmology',
+      qualifications: ['MD Ophthalmology', 'Board Certified Eye Surgeon'],
+      experienceYears: 12,
+      consultationFee: 110,
+      biography: 'Comprehensive ophthalmic care, glaucoma screening, diabetic retinopathy evaluations, refractive diagnostics, and dry eye therapy.',
+      avatar: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=400',
+      languages: ['English', 'Russian'],
+      consultationTypes: ['IN_PERSON'],
+      rating: 4.9,
+      reviewCount: 189,
+      isVerified: true,
+      isActive: true,
+      hospitalAffiliation: 'Medicare Vision & Eye Center',
+      availableDays: ['Wednesday', 'Thursday', 'Friday', 'Saturday'],
+      availableSlots: ['09:00', '10:00', '11:00', '14:00', '15:00'],
+    },
+  ];
+
+  for (const doc of doctorsData) {
+    const docUser = await User.findOneAndUpdate(
+      { email: doc.email.toLowerCase() },
+      {
+        $setOnInsert: {
+          fullName: doc.name,
+          email: doc.email.toLowerCase(),
+          password: defaultDoctorPassword,
+          role: 'DOCTOR',
+          phone: doc.phone,
+        },
+      },
+      { upsert: true, new: true }
+    );
+
+    await Doctor.findOneAndUpdate(
+      { email: doc.email.toLowerCase() },
+      {
+        $set: {
+          ...doc,
+          userId: docUser._id,
+        },
+      },
+      { upsert: true, new: true }
+    );
+  }
+
   console.log('\n=======================================================');
   console.log('✅ [System Baseline Configuration Synchronized]');
   console.log('  - Categories: synchronized');
@@ -856,6 +1090,7 @@ export async function runSeed() {
   console.log('  - Diagnostic Tests: synchronized');
   console.log('  - Health Packages: synchronized');
   console.log('  - Healthcare Facilities: synchronized');
+  console.log('  - Specialist Physicians: synchronized (10 doctors)');
   console.log('  - Premium 1-Year Membership Plan: active');
   console.log('=======================================================\n');
 }
